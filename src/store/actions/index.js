@@ -1,3 +1,4 @@
+import { current } from "@reduxjs/toolkit";
 import api from "../../api/api"
 
 export const fetchProducts=(query)=>async(dispatch)=>{
@@ -56,3 +57,68 @@ export const fetchCategories=()=>async(dispatch)=>{
         });
     }
 }
+
+export const removeFromCart=(productId)=>(dispatch,getState)=>{
+    dispatch({
+        type:"REMOVE_FROM_CART",
+        payload:productId
+    })
+}
+
+export const addToCart=(data,qty=1,toast)=>
+    (dispatch,getState)=>{
+        //Find the product
+        const {products}=getState().products;
+        const getProduct=products.find(
+            (item)=>item.productId===data.productId
+        )
+        //check for stock
+        const isQuantityExisits=getProduct.quantity>=qty;
+        //if in stock add 
+        if(isQuantityExisits){
+            dispatch({
+                type:"ADD_TO_CART",
+                payload:{...data,quantity:qty}
+            })
+            localStorage.setItem("cartItems",JSON.stringify(getState().carts.cart))
+            toast.success(`${data?.productName} added to cart!`)
+        }else{
+            //error
+            toast.error("Product stock limited!")
+        }
+    }
+
+    export const increaseCartQuantity=
+        (data,toast,currentQuantity,setCurrentQuantity)=>
+        (dispatch,getState)=>{
+            const {products}=getState().products;
+            const getProduct=products.find(
+                (item)=>item.productId===data.productId
+            )
+            const isQuantityExisits=getProduct.quantity>=currentQuantity+1;
+            if(isQuantityExisits){
+                const newQty=currentQuantity+1;
+                setCurrentQuantity(newQty);
+                dispatch({
+                    type:"ADD_TO_CART",
+                    payload:{...data,quantity:newQty}
+                })
+                localStorage.setItem("cartItems",JSON.stringify(getState().carts.cart))
+            }
+            else{
+                toast.error("Product stock limited!")
+            }
+        }
+
+    export const decreaseCartQuantity=
+        (data,newQuantity)=>
+        (dispatch,getState)=>{
+            dispatch({
+                type:"ADD_TO_CART",
+                payload:{...data,quantity:newQuantity},
+            })
+            localStorage.setItem("cartItems",JSON.stringify(getState().carts.cart))
+        }
+
+        
+
