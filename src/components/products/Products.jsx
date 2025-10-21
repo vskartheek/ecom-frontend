@@ -12,7 +12,6 @@ const Products = () => {
     const {isLoading,errorMessage}=useSelector((state)=>state.errors)
     const {products,pagination}=useSelector((state)=>state.products)
     const dispatch=useDispatch();
-    
     useProductFilter();
     const {categories}=useSelector((state)=>state.categories)
     useEffect(()=>{

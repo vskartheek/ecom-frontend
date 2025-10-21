@@ -42,6 +42,19 @@ export const cartReducer=(state=initialState,action)=>{
                 ...state,
                 cart:filteredCartItems
             }
+        case "FETCHED_USER_CART":
+            return {
+                ...state,
+                cart:action.payload,
+                cartId:action.cartId,
+                totalPrice:action.totalPrice
+            };
+        case "CLEAR_CART":
+            return {
+                cart:[],
+                totalPrice:0,
+                cartId:null
+            }
     
         default:
             return state;

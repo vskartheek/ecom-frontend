@@ -1,6 +1,7 @@
 const initialState={
     isLoading:false,
-    errorMessage:null
+    errorMessage:null,
+    btnLoder:false
 }
 
 export const errorReducer=(state=initialState,action)=>{
@@ -9,6 +10,12 @@ export const errorReducer=(state=initialState,action)=>{
             return {
                 ...state,
                 isLoading:true,
+                errorMessage:null
+            }
+        case "BUTTON_LOADER":
+            return {
+                ...state,
+                btnLoder:action.payload,
                 errorMessage:null
             }
 

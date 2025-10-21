@@ -1,14 +1,16 @@
-import { Badge } from '@mui/material';
+import { Avatar, Badge, Menu, MenuItem } from '@mui/material';
 import React from 'react'
 import { FaCross, FaShoppingCart, FaSignInAlt, FaStore } from 'react-icons/fa'
 import { Link, useLocation } from 'react-router-dom'
 import { IoMdMenu } from 'react-icons/io'
-import { RxCross2 } from 'react-icons/rx'
+import { RxAvatar, RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux';
+import UserMenu from '../UserMenu';
 const Navbar = () => {
     const path=useLocation().pathname;
     const[navBarOpen,setNavBarOpen]=React.useState(false);
     const {cart}=useSelector((state)=>state.carts)
+    const {user}=useSelector((state)=>state.auth)
 
   return (
     <div className='h-[70px] bg-custom-gradient text-white z-50 flex items-center sticky top-0'>
@@ -72,22 +74,24 @@ const Navbar = () => {
                         </Badge>
                     </Link>
                 </li>
-
+                {(user && user.id) ?(
+                    <li className='font-[500] transition-all duration-150'>
+                        <UserMenu username={user.username}/>
+                    </li>
+                ):(
                 <li className='font-[500] transition-all duration-150'>
-                    <Link to="/login" 
+                     <Link to="/login" 
                     className="flex items-center space-x-2 px-4 py-[6px]
                             bg-gradient-to-r from-purple-600 to-red-600
                             text-white font-semibold rounded-md shadow-lg
                             hover:from-purple-500 hover:to-red-400
                             transition duriation-300 ease-in-out transform
-                    "
-                    
-                    >
+                    ">
                         <FaSignInAlt/>
                         <span>Login</span>
                     </Link>
                 </li>
-                
+                )}
             </ul>
             <button onClick={()=>setNavBarOpen(!navBarOpen)}
                     className='sm:hidden flex items-center sm:mt-0 mt-2'
